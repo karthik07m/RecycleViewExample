@@ -30,8 +30,9 @@ public class EmployeeMapper implements ResultSetMapper<Employee> {
     rs.getLong("EMP_MOBILE_NUMBER"),
     rs.getDate("EMP_DATE_JOINED"),
     rs.getString("EMP_DEPARTMENT"),
-    rs.getString("EMP_DESIGNATION"),
-    rs.getInt("EMP_LEAVE_BALANCE"),
+    rs.getInt("EMP_LEAVE_BALANCE_EL"),
+    rs.getInt("EMP_LEAVE_BALANCE_SL"),
+    rs.getInt("EMP_LEAVE_BALANCE_ML"),
     rs.getInt("EMP_MANAGER_ID"));
   }
 }

@@ -52,19 +52,6 @@ public interface LeaveDetailsDAO  {
   void mgrcommnets(@Bind("managerComments") String lvdManagerComments, @Bind("leaveStatus") String lvdLeaveStatus,
       @Bind("lvdId") int lvdId);
 
-  /**
-  *
-  * @param lvdManagerComments of the manager
-  * @param lvdLeaveStatus of the employee
-  * @param lvdId of the employee
-  */
-
-  @SqlUpdate("UPDATE LEAVE_DETAILS SET LVD_MANAGER_COMMENTS = :managerComments,"
-            + "LVD_MATERNITY_LEAVE_STATUS = :leaveStatus where "
-            + "LVD_ID =:lvdId")
-  void mgrcommnetsML(@Bind("managerComments") String lvdManagerComments, @Bind("leaveStatus") String lvdLeaveStatus,
-            @Bind("lvdId") int lvdId);
-
     /**
      * return all the details of the selected employee.
      * @param empId the id of the employee
@@ -89,14 +76,6 @@ public interface LeaveDetailsDAO  {
       + " LVD_LEAVE_STATUS ='PENDING' ")
   @Mapper(LeaveDetailsMapper.class)
   List<LeaveDetails> pending(@Bind("empId") int empId);
-
-   /**
-   * return all the details of the selected Leavedetails.
-   * @return the Leavedetails object
-   */
-  @SqlQuery("SELECT * FROM LEAVE_DETAILS WHERE LVD_MATERNITY_LEAVE_STATUS = 'PENDING BY HR'")
-  @Mapper(LeaveDetailsMapper.class)
-  List<LeaveDetails> hrPending();
 
     /**
      * insert all the details of the employee leave.
@@ -139,15 +118,9 @@ public interface LeaveDetailsDAO  {
   void updateCEO(@Bind("empId") int empId);
 
     /**
-     * insert all the details of the employee leave.
-     * @param empId the employee id of the employee.
-     */
-  @SqlUpdate("UPDATE LEAVE_DETAILS SET LVD_MATERINTY_LEAVE_STATUS = 'APPROVED' WHERE EMP_ID = :empId")
-  void updateCEOML(@Bind("empId") int empId);
-
-    /**
     * close with no args is used to close the connection.
     */
   void close();
 
 }
+

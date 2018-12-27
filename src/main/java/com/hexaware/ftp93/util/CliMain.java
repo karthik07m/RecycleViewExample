@@ -22,8 +22,7 @@ public class CliMain {
     System.out.println("4. Leave History");
     System.out.println("5. Leave Pending");
     System.out.println("6. Manager's Action");
-    System.out.println("7. HR Manager's Action");
-    System.out.println("8`. Exit");
+    System.out.println("7. Exit");
     System.out.println("Enter your choice:");
     int menuOption = option.nextInt();
     mainMenuDetails(menuOption);
@@ -50,9 +49,6 @@ public class CliMain {
         managerAction();
         break;
       case 7:
-        hrLeavePending();
-        break;
-      case 8:
       // halt since normal exit throws a stacktrace due to jdbc threads not responding
         Runtime.getRuntime().halt(0);
       default:
@@ -69,14 +65,16 @@ public class CliMain {
     } else {
       System.out.println(employee.getEmpId() + " " + employee.getEmpName() + " " + employee.getEmpEmail() + " "
           + employee.getEmpDoj() + " " + employee.getEmpDept() + " " + employee.getEmpMobileNo() + " "
-          + employee.getEmpManagerId() + " " + employee.getEmpLeaveBalance());
+          + employee.getEmpManagerId() + " " + employee.getEmpLeaveBalanceEL() + " "
+          + employee.getEmpLeaveBalanceSL() + " " + employee.getEmpLeaveBalanceML());
     }
   }
   private void listEmployeesDetails() {
     Employee[] employee = Employee.listAll();
     for (Employee e : employee) {
       System.out.println(e.getEmpId() + " " + e.getEmpName() + " " + e.getEmpEmail() + " " + e.getEmpDoj() + " "
-          + e.getEmpDept() + " " + e.getEmpMobileNo() + " " + e.getEmpManagerId() + " " + e.getEmpLeaveBalance());
+          + e.getEmpDept() + " " + e.getEmpMobileNo() + " " + e.getEmpManagerId() + " "
+          + e.getEmpLeaveBalanceEL() + " " + e.getEmpLeaveBalanceSL() + " " + e.getEmpLeaveBalanceML());
     }
   }
   private void managerAction() {
@@ -111,11 +109,11 @@ public class CliMain {
   }
   private void leavePending() {
     int mgrId = 0;
-    System.out.println("Enter Manager Id");
+    System.out.println("Enter the Manager Id");
     try {
       mgrId = Integer.parseInt(option.next());
     } catch (NumberFormatException e) {
-      System.out.println("ManagerId should be in Numbers");
+      System.out.println("ManagerId should be the employee Id of the manager");
     }
     if (mgrId > 0) {
       LeaveDetails[] pending = LeaveDetails.listPending(mgrId);
@@ -130,47 +128,7 @@ public class CliMain {
         }
       }
     } else {
-      System.out.println("Enter valid ID");
-    }
-  }
-  private void hrLeavePending() {
-   /* int hrid = 0;
-    System.out.println("Enter your id: ");
-    hrid = option.nextInt();
-    LeaveDetails[] hrpending = LeaveDetails.hrPending(hrid);
-    int size = hrpending.length;
-    if (size == 0) {
-      System.out.println("no records");
-    } else {
-      for (LeaveDetails e : hrpending) {
-        System.out.println(e.getEmpId() + " " + e.getLvdId() + " " + e.getLvdNoOfDays() + " " + e.getLvdStartDate()
-            + " " + e.getLvdEndDate() + " " + e.getLvdLeaveType() + " " + e.getLvdLeaveStatus() + " " + e.getLvdReason()
-            + e.getLvdAppliedOn() + " " + e.getManagerComments());
-      }
-    } */
-    System.out.println("Enter your employee id: ");
-    int hrId = option.nextInt();
-    Employee emp = Employee.listById(hrId);
-    if (emp == null) {
-      System.out.println("No such employee found. Please enter a valid Employee Id");
-    } else if (!emp.getEmpDesignation().equals("HR Manager")) {
-      System.out.println("Your are not authorized to enter");
-      System.out.println("Only HR can access it.");
-    } else {
-      LeaveDetails[] hrpending = LeaveDetails.hrPendings();
-      for (LeaveDetails e : hrpending) {
-        System.out.println(e.getEmpId() + " " + e.getLvdId() + " " + e.getLvdNoOfDays() + " " + e.getLvdStartDate()
-            + " " + e.getLvdEndDate() + " " + e.getLvdLeaveType() + " " + e.getLvdLeaveStatusML() + " "
-            + e.getLvdReason() + " " + e.getLvdAppliedOn() + " " + e.getManagerComments());
-      }
-      System.out.println("Enter a leave ID: ");
-      int leaveId = option.nextInt();
-      System.out.println("*****Approved/Denied:*****");
-      String status = option.next();
-      System.out.println("*****Manager Comments:*****");
-      String mgrcomm = option.next();
-      String result = LeaveDetails.hrManagerAction(leaveId, status, mgrcomm);
-      System.out.println(result);
+      System.out.println("Enter the valid Employee ID");
     }
   }
   private void leaveHistory() {
@@ -220,13 +178,15 @@ public class CliMain {
       } else {
         System.out.println("**************************");
         System.out.println(" Welcome " + emp.getEmpName());
-        System.out.println(" Avaliable leave balance: " + emp.getEmpLeaveBalance());
+        System.out.println(" Avaliable leave balance(EL): " + emp.getEmpLeaveBalanceEL());
+        System.out.println(" Avaliable leave balance(SL): " + emp.getEmpLeaveBalanceSL());
+        System.out.println(" Avaliable leave balance(ML): " + emp.getEmpLeaveBalanceML());
         System.out.println("**************************");
         System.out.println("Enter Start Date (yyyy-MM-dd): ");
         String startDate = option.next();
         System.out.println("Enter End Date (yyyy-MM-dd): ");
         String endDate = option.next();
-        System.out.println("Enter LeaveType (EL/ML): ");
+        System.out.println("Enter LeaveType (EL/SL/ML): ");
         String leaveType = option.next();
         System.out.println("Enter LeaveReason: ");
         String leaveReason = option.next();

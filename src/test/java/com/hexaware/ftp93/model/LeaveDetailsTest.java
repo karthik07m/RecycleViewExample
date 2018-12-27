@@ -31,7 +31,33 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
+// leaveDetails ld = new LeaveDetails(3000, 1230, 3, date1, date2, LeaveType.EL, LeaveStatus.APPROVED, "fever", date3,
+//          "Always taking leaves");
+//      assertEquals(1230, ld.getLvdId());
+//      assertEquals(3000, ld.getEmpId());
+//      assertEquals(sdf.parse("2018-11-13"), ld.getLvdStartDate());
+//      assertEquals(sdf.parse("2018-11-15"), ld.getLvdEndDate());
+//      assertEquals(3, ld.getLvdNoOfDays());
+//      assertEquals(LeaveType.EL, ld.getLvdLeaveType());
+//      assertEquals(LeaveStatus.APPROVED, ld.getLvdLeaveStatus());
+//      assertEquals("fever", ld.getLvdReason());
+//      assertEquals(sdf.parse("2018-11-10"), ld.getLvdAppliedOn());
+//      assertEquals("Always taking leaves", ld.getManagerComments());
+//      LeaveDetails ld1 = null;
+//    }
+
+  /**
+   * @throws ParseException throws Parse Exception
+   */
+  @Test
+  public final void testLeaveDetailsSetters() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date date1 = sdf.parse("2018-11-13");
+    Date date2 = sdf.parse("2018-11-15");
+    Date date3 = sdf.parse("2018-11-10");
+    LeaveDetails ld = new LeaveDetails(3000, 1230, 3, date1, date2, LeaveType.EL, LeaveStatus.APPROVED, "fever", date3,
+        "Always taking leaves");
+    ld.setLvdId(1230);// /**
  * Test class for Employee.
  */
 public class LeaveDetailsTest {
@@ -47,32 +73,7 @@ public class LeaveDetailsTest {
     Date date2 = (Date) sdf.parse("2018-11-15");
     Date date3 = (Date) sdf.parse("2018-11-10");
     LeaveDetails ld = new LeaveDetails(3000, 1230, 3, date1, date2, LeaveType.EL, LeaveStatus.APPROVED, "fever", date3,
-        "Always taking leaves");
-    assertEquals(1230, ld.getLvdId());
-    assertEquals(3000, ld.getEmpId());
-    assertEquals(sdf.parse("2018-11-13"), ld.getLvdStartDate());
-    assertEquals(sdf.parse("2018-11-15"), ld.getLvdEndDate());
-    assertEquals(3, ld.getLvdNoOfDays());
-    assertEquals(LeaveType.EL, ld.getLvdLeaveType());
-    assertEquals(LeaveStatus.APPROVED, ld.getLvdLeaveStatus());
-    assertEquals("fever", ld.getLvdReason());
-    assertEquals(sdf.parse("2018-11-10"), ld.getLvdAppliedOn());
-    assertEquals("Always taking leaves", ld.getManagerComments());
-    LeaveDetails ld1 = null;
-  }
-
-  /**
-   * @throws ParseException throws Parse Exception
-   */
-  @Test
-  public final void testLeaveDetailsSetters() throws ParseException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date date1 = sdf.parse("2018-11-13");
-    Date date2 = sdf.parse("2018-11-15");
-    Date date3 = sdf.parse("2018-11-10");
-    LeaveDetails ld = new LeaveDetails(3000, 1230, 3, date1, date2, LeaveType.EL, LeaveStatus.APPROVED, "fever", date3,
-        "Always taking leaves");
-    ld.setLvdId(1230);
+    "Always taking leaves");
     ld.setEmpId(3000);
     ld.setStartDate(sdf.parse("2018-11-13"));
     ld.setEndDate(sdf.parse("2018-11-15"));
@@ -217,7 +218,7 @@ public class LeaveDetailsTest {
     new Expectations()
     {
       {
-        dao.insert(3001, 2, "2018-12-19", "2018-12-20", "EL", "function", "2018-12-07");
+        dao.insert(3001, 2, "2018-12-26", "2018-12-27", "SL", "function", "2018-12-20");
       }
     };
     new MockUp<LeaveDetails>()
@@ -234,7 +235,7 @@ public class LeaveDetailsTest {
     };
     new Expectations() {
       {
-        dao.count(3001, "2018-12-19", "2018-12-20");
+        dao.count(3001, "2018-12-26", "2018-12-27");
       }
     };
     // new Expectations() {
@@ -250,11 +251,11 @@ public class LeaveDetailsTest {
     //   }
     // };
 
-    String act = LeaveDetails.applyProcess(3001, "2018-12-19", "2018-12-20", "EL", "function");
-    String exp =  "**** Your leave request succcessfully recored " + "form :" + "2018-12-19"
-                + " - " + "2018-12-20" + " for: " + 2 + "days" + " ****";
+    String act = LeaveDetails.applyProcess(3001, "2018-12-26", "2018-12-27", "SL", "function");
+    String exp =  "**** Your leave request succcessfully recored " + "form :" + "2018-12-26"
+                + " - " + "2018-12-27" + " for: " + 2 + "days" + " ****";
     assertEquals(exp, act);
-    String actual = LeaveDetails.applyProcess(1000, "2018-12-22", "2018-12-23", "EL", "function");
+    String actual = LeaveDetails.applyProcess(2000, "2018-12-22", "2018-12-23", "ML", "function");
     String expec =  "**** Your leave request succcessfully recored " + "form :" + "2018-12-22"
                 + " - " + "2018-12-23" + " for: " + 2 + "days" + " ****";
     assertEquals(expec, actual);
@@ -304,4 +305,5 @@ public class LeaveDetailsTest {
     String exc1 = "Denied Permission";
     assertEquals(exc1, act1);
   }
-}
+     }
+    }

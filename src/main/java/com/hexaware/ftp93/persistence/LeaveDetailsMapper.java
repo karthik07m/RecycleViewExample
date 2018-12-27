@@ -26,7 +26,8 @@ public class LeaveDetailsMapper implements ResultSetMapper<LeaveDetails> {
      */
     return new LeaveDetails(rs.getInt("EMP_ID"), rs.getInt("LVD_ID"), rs.getInt("LVD_NO_OF_DAYS"),
         rs.getDate("LVD_START_DATE"), rs.getDate("LVD_END_DATE"), LeaveType.valueOf(rs.getString("LVD_LEAVE_TYPE")),
-        LeaveStatus.valueOf(rs.getString("LVD_LEAVE_STATUS")), rs.getString("LVD_MATERNITY_LEAVE_STATUS"),
-        rs.getString("LVD_REASON"), rs.getDate("LVD_APPLIED_ON"), rs.getString("LVD_MANAGER_COMMENTS"));
+        LeaveStatus.valueOf(rs.getString("LVD_LEAVE_STATUS")), rs.getString("LVD_REASON"), rs.getDate("LVD_APPLIED_ON"),
+        rs.getString("LVD_MANAGER_COMMENTS"));
   }
 }
+

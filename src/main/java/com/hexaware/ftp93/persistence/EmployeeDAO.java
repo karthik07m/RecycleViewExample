@@ -1,3 +1,4 @@
+
 package com.hexaware.ftp93.persistence;
 
 import com.hexaware.ftp93.model.Employee;
@@ -35,9 +36,27 @@ public interface EmployeeDAO  {
    * @param empID        the id of the employee
    * @param reaminingBal id of the employee.
    */
-  @SqlUpdate("Update employee set EMP_LEAVE_BALANCE = :remainingBal where EMP_ID = :empID")
+  @SqlUpdate("Update employee set EMP_LEAVE_BALANCE_EL = :remainingBal where EMP_ID = :empID")
   @Mapper(EmployeeMapper.class)
-  void updateBal(@Bind("empID") int empID, @Bind("remainingBal") int reaminingBal);
+  void updateBalEL(@Bind("empID") int empID, @Bind("remainingBal") int reaminingBal);
+
+  /**
+   * return all the details of the selected employee.
+   * @param empID        the id of the employee
+   * @param reaminingBal id of the employee.
+   */
+  @SqlUpdate("Update employee set EMP_LEAVE_BALANCE_SL = :remainingBal where EMP_ID = :empID")
+  @Mapper(EmployeeMapper.class)
+  void updateBalSL(@Bind("empID") int empID, @Bind("remainingBal") int reaminingBal);
+
+  /**
+   * return all the details of the selected employee.
+   * @param empID        the id of the employee
+   * @param reaminingBal id of the employee.
+   */
+  @SqlUpdate("Update employee set EMP_LEAVE_BALANCE_ML = :remainingBal where EMP_ID = :empID")
+  @Mapper(EmployeeMapper.class)
+  void updateBalML(@Bind("empID") int empID, @Bind("remainingBal") int reaminingBal);
 
 /**
    * close with no args is used to close the connection.

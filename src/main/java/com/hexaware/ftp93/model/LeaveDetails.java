@@ -33,7 +33,6 @@ public class LeaveDetails {
   private Date lvdEndDate;
   private LeaveType lvdLeaveType;
   private LeaveStatus lvdLeaveStatus;
-  private String lvdleaveStatusML;
   private String lvdReason;
   private Date lvdAppliedOn;
   private String lvdManagerComments;
@@ -72,7 +71,6 @@ public class LeaveDetails {
    * @param arglvdEndDate         to initialize lvdEndDate.
    * @param arglvdLeaveType       to initialize lvdLeaveType
    * @param arglvdLeaveStatus     to initialize lvdLeaveStatus
-   * @param arglvdLeaveStatusML   to initialize lvdLeaveStatus
    * @param arglvdReason          to initialize lvdReason.
    * @param arglvdAppliedOn       to initialize lvdAppliedOn.
    * @param arglvdManagerComments to initialize lvdManagerComments.
@@ -80,7 +78,6 @@ public class LeaveDetails {
 
   public LeaveDetails(final int argEmpId, final int argLvdId, final int arglvdNoOfDays, final Date arglvdStartDate,
       final Date arglvdEndDate, final LeaveType arglvdLeaveType, final LeaveStatus arglvdLeaveStatus,
-      final String arglvdLeaveStatusML,
       final String arglvdReason, final Date arglvdAppliedOn, final String arglvdManagerComments) {
     this.empId = argEmpId;
     this.lvdId = argLvdId;
@@ -89,7 +86,6 @@ public class LeaveDetails {
     this.lvdEndDate = arglvdEndDate;
     this.lvdLeaveType = arglvdLeaveType;
     this.lvdLeaveStatus = arglvdLeaveStatus;
-    this.lvdleaveStatusML = arglvdLeaveStatusML;
     this.lvdReason = arglvdReason;
     this.lvdAppliedOn = arglvdAppliedOn;
     this.lvdManagerComments = arglvdManagerComments;
@@ -149,14 +145,6 @@ public class LeaveDetails {
    */
   public final LeaveStatus getLvdLeaveStatus() {
     return lvdLeaveStatus;
-  }
-
-   /**
-   * Gets the LeaveStatus.
-   * @return this Leave Status.
-   */
-  public final String getLvdLeaveStatusML() {
-    return lvdleaveStatusML;
   }
 
   /**
@@ -233,13 +221,6 @@ public class LeaveDetails {
   }
 
   /**
-   * @param argLvdLeaveStatusML to set Leave Status.
-   */
-  public final void setLvdLeaveStatusML(final String argLvdLeaveStatusML) {
-    this.lvdleaveStatusML = argLvdLeaveStatusML;
-  }
-
-  /**
    * @param argLvdReason to set Leave Reason.
    */
   public final void setLvdReason(final String argLvdReason) {
@@ -279,38 +260,36 @@ public class LeaveDetails {
     LeaveDetails ld = dao().findLeave(leaveId);
     int empID = ld.getEmpId();
     Employee employee = edao().find(empID);
-    int availaBal = employee.getEmpLeaveBalance();
-    int remainingBal = availaBal - noOfDays;
-    int total = availaBal + noOfDays;
     String dbstatus = null;
     String result = "";
     String status1 = status.toLowerCase();
-    System.out.println(ld.lvdLeaveType.toString());
     if (status1.equals("approved")) {
-      if (ld.getLvdLeaveStatus().toString().equals("APPROVED")
-          || ld.getLvdLeaveStatus().toString().equals("PENDING BY HR")) {
-        result = "You have already approved";
-      } else if (ld.lvdLeaveType.toString().equals("ML")) {
-        dbstatus = "PENDING BY HR";
-        dao().mgrcommnetsML(mgrComments, dbstatus, leaveId);
-        result = "*** Successfully approved by manager. Should also approved by Hr ****";
+      dbstatus = "APPROVED";
+      dao().mgrcommnets(mgrComments, dbstatus, leaveId);
+      result = "Approved Successfully";
+      if (ld.getLvdLeaveType().toString().equals("EL")) {
+        int remainingBal = employee.getEmpLeaveBalanceEL() - noOfDays;
+        edao().updateBalEL(empID, remainingBal);
+      } else if (ld.getLvdLeaveType().toString().equals("SL")) {
+        int remainingBal = employee.getEmpLeaveBalanceSL() - noOfDays;
+        edao().updateBalSL(empID, remainingBal);
       } else {
-        dbstatus = "APPROVED";
-        dao().mgrcommnets(mgrComments, dbstatus, leaveId);
-        result = "Approved Successfully";
-        edao().updateBal(empID, remainingBal);
+        int remainingBal = employee.getEmpLeaveBalanceML() - noOfDays;
+        edao().updateBalML(empID, remainingBal);
       }
     } else if (status1.equals("denied")) {
-      if (ld.getLvdLeaveStatus().toString().equals("DENIED")) {
-        result = "You have already denied";
-      } else if (ld.lvdLeaveType.toString().equals("ML")) {
+      if (ld.getLvdLeaveStatus().toString().equals("APPROVED")) {
         dbstatus = "DENIED";
-        dao().mgrcommnetsML(mgrComments, dbstatus, leaveId);
-        result = "Denied by manager";
-        edao().updateBal(empID, total);
-      } else if (ld.getLvdLeaveStatus().toString().equals("APPROVED")) {
-        dbstatus = "DENIED";
-        edao().updateBal(empID, total);
+        if (ld.getLvdLeaveType().toString().equals("EL")) {
+          int remainingBal = employee.getEmpLeaveBalanceEL() + noOfDays;
+          edao().updateBalEL(empID, remainingBal);
+        } else if (ld.getLvdLeaveType().toString().equals("SL")) {
+          int remainingBal = employee.getEmpLeaveBalanceSL() + noOfDays;
+          edao().updateBalSL(empID, remainingBal);
+        } else {
+          int remainingBal = employee.getEmpLeaveBalanceML() + noOfDays;
+          edao().updateBalML(empID, remainingBal);
+        }
         dao().mgrcommnets(mgrComments, dbstatus, leaveId);
         result = "Denied Permission";
       } else {
@@ -321,48 +300,7 @@ public class LeaveDetails {
     } else {
       result = "Please enter valid String";
     }
-    return result;
-  }
-  /**
-   * Method for Approve or Deny the Leave.
-   * @param leaveId     to enter LeaveId to approve/deny.
-   * @param status      to enter status to approve/deny.
-   * @param mgrComments to get manager comments.
-   * @return String.
-   */
-  public static String hrManagerAction(final int leaveId, final String status, final String mgrComments) {
-    LeaveDetails ld = dao().findLeave(leaveId);
-    int empID = ld.getEmpId();
-    Employee employee = edao().find(empID);
-    String dbstatus = null;
-    String result = "";
-    String status1 = status.toLowerCase();
-    int availaBal = employee.getEmpLeaveBalance();
-    int remainingBal = availaBal - ld.getLvdNoOfDays();
-    //int total = availaBal + ld.getLvdNoOfDays();
-    // if (ld.lv)
-    if (status1.equals("approved")) {
-      if (ld.getLvdLeaveStatusML().equals("PENDING")) {
-        System.out.println("First it has to be approved by manager");
-      } else if (ld.getLvdLeaveStatus().toString().equals("APPROVED")) {
-        result = "You have already approved";
-      } else {
-        dbstatus = "APPROVED";
-        dao().mgrcommnetsML(mgrComments, dbstatus, leaveId);
-        result = "**** HR APPROVAL SUCCESSFUL ***";
-        edao().updateBal(empID, remainingBal);
-      }
-    } else if (status1.equals("denied")) {
-      if (ld.getLvdLeaveStatus().toString().equals("APPROVED")) {
-        result = "You have already approved";
-      } else {
-        dbstatus = "denied";
-        dao().mgrcommnetsML(mgrComments, dbstatus, leaveId);
-        result = "**** DENIED ****";
-      }
-    } else {
-      result = "***** Enter a valid leave type ****";
-    }
+
     return result;
   }
 
@@ -388,15 +326,6 @@ public class LeaveDetails {
    */
   public static LeaveDetails[] listAll() {
     List<LeaveDetails> es = dao().list();
-    return es.toArray(new LeaveDetails[es.size()]);
-  }
-
-  /**
-   * list all employee leave details.
-   * @return all employees' leave details
-   */
-  public static LeaveDetails[] hrPendings() {
-    List<LeaveDetails> es = dao().hrPending();
     return es.toArray(new LeaveDetails[es.size()]);
   }
 
@@ -451,34 +380,42 @@ public class LeaveDetails {
     long diff = enDate.getTime() - strDate.getTime();
     long leavedays = diff / (1000 * 60 * 60 * 24);
     leavedays = leavedays + 1;
-    int availableBal = emp.getEmpLeaveBalance() - (int) leavedays;
+    int availableBalanceEL = 0;
+    int availableBalanceML = 0;
+    int availableBalanceSL = 0;
     int overLap = countNo(empid, startDate, endDate);
-    //String eL = LeaveType.valueOf("EL").toString();
-    /*if (!leaveType.toUpperCase().equals(eL)) {
-      msg = "***** Please enter valid leave type *****";
-    } else */
-    if (overLap > 0) {
+    String el = LeaveType.valueOf("EL").toString();
+    String sl = LeaveType.valueOf("SL").toString();
+    String ml = LeaveType.valueOf("ML").toString();
+    if (leaveType.toUpperCase().equals(el)) {
+      availableBalanceEL = emp.getEmpLeaveBalanceEL() - (int) leavedays;
+    } else if (leaveType.toUpperCase().equals(sl)) {
+      availableBalanceSL = emp.getEmpLeaveBalanceSL() - (int) leavedays;
+    } else if (leaveType.toUpperCase().equals(ml)) {
+      availableBalanceML = emp.getEmpLeaveBalanceML() - (int) leavedays;
+    }
+    if (!(leaveType.toUpperCase().equals(el) || leaveType.toUpperCase().equals(sl)
+        || leaveType.toUpperCase().equals(ml))) {
+      msg = "***** Please enter valid leave type(EL/SL/ML) *****";
+    } else if (availableBalanceEL < 0 || availableBalanceSL < 0 || availableBalanceML < 0) {
+      msg = "*****Insufficient Leave Balance(EL/SL/ML) *****";
+    } else if (overLap > 0) {
       msg = "***** You have already applied for the leave. ****";
     } else if (strDate.compareTo(today) == -1) {
       msg = "**** Invalid start date. Start date cann't be past ****";
     } else if (leavedays <= 0) {
       System.out.println("**** End date is greater than start date. Please enter a valid End date. ****");
     } else {
-      dao().insert(empid, leavedays, startDate, endDate, leaveType.toUpperCase(), leaveReason, sf.format(today));
+      dao().insert(empid, leavedays, startDate, endDate, leaveType, leaveReason, sf.format(today));
       msg = "**** Your leave request succcessfully recored " + "form :" + startDate + " - " + endDate + " for: "
-          + leavedays + "days" + " ****";
+          + leavedays  + "days" + " ****";
       if (mgrId == 0) {
-        if (leaveType.toString().equals("EL")) {
-          dao().updateCEO(empid);
-        } else {
-          dao().updateCEOML(empId);
-        }
-        edao().updateBal(empid, availableBal);
+        dao().updateCEO(empid);
+        edao().updateBal(empid, availableBalEL);
       }
     }
     return msg;
   }
-
   /**
    * No overlapping Leaves.
    * @param empid     id to get employee details.

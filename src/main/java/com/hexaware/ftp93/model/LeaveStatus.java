@@ -17,5 +17,5 @@ public enum LeaveStatus {
     /**
      * Shows leave is Denied.
      */
-    DENIED,
+    DENIED
 }
