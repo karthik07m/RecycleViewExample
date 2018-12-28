@@ -1,0 +1,106 @@
+<!-- <form #eForm="ngForm" (ngSubmit)="login(eForm)"> -->
+<div style="text-align:center">
+
+  <h1>
+  
+  Welcome to {{title}}!
+  
+  </h1>
+  
+  </div>
+  
+  <div>
+  
+  <table border="1">
+  
+  <thead>
+  
+  <tr>
+  
+  <th>Employee ID</th>
+  
+  <th>Employee Name</th>
+  
+  <th>Email</th>
+  
+  <th>Phone Number</th>
+  
+  <th>Date of joining</th>
+  
+  <th>Department</th>
+  
+  <th>Leave Balance</th>
+  
+  <th>Manager Id</th>
+  
+  </tr>
+  
+  </thead>
+  
+  <tbody class="employees">
+  
+  <tr *ngFor="let employee of employees">
+  
+  <td>
+  
+  <h5>{{employee.empId}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <h5>{{employee.empName}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <h5>{{employee.empEmail}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <h5>{{employee.empMobileNo}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <h5>{{employee.empDoj}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <h5>{{employee.empDept}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <h5>{{employee.empLeaveBalance}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <h5>{{employee.empManagerId}}</h5>
+  
+  </td>
+  
+  <td>
+  
+  <!-- <button (click)>Login </button> -->
+  <button (click)="emp(employee.empId)">login</button> 
+  
+  </td> 
+  
+  </tr>
+  
+  </tbody>
+  
+  </table>
+  
+  </div>
+  <!-- </form> -->

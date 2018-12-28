@@ -1,0 +1,75 @@
+<body>
+<p>
+ EMPLOYEE LEAVE HISTORY !!
+</p>
+<pre>
+    
+</pre>
+    <div id="example1">
+  <table border="1">
+      <thead>
+          <tr>
+              <th>Leave ID</th>
+              <th>Employee ID</th>
+              <th>Leave Start Date</th>
+              <th>Leave End Date </th>
+              <th>Leave Type</th>
+              <th>Leave Status</th>
+              <th>Leave Reason</th>
+              <th>Leave Applied On</th>
+              <th>Leave Manager Comment</th>
+          </tr>
+      </thead>
+      <tbody class="ld">
+          <tr *ngFor="let data of ld ">
+              <td>
+                  <div class="zoom">
+                  <h5>{{data.leaveId}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                  <h5>{{data.empId}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                  <h5>{{data.leaveStartDate}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                  <h5>{{data.leaveEndDate}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                  <h5>{{data.leaveType}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                  <h5>{{data.leaveStatus}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                  <h5>{{data.leaveReason}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                  <h5>{{data.leaveAppliedOn}}</h5>
+                  </div>
+              </td>
+              <td>
+                    <div class="zoom">
+                <h5>{{data.leaveManagerComment}}</h5>
+                </div>
+              </td>                
+          </tr>
+      </tbody>
+  </table>
+  </div>
+</body>
+  

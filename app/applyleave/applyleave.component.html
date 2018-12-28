@@ -1,0 +1,27 @@
+<Html>
+  <body>
+        <div class = "a">   
+        <h1 style=margin-top:0px><font color="white"> Apply Leave</font></h1>
+        <form #sForm="ngForm" (ngSubmit)="display(sForm)">
+        <h4>Emp-Id :</h4>
+        <input type="text" name="username" id="username" class="form-control" placeholder="{{userid}}" disabled><br>
+        <h4>Enter Leave Start Date:</h4>
+        <input type="Date" name="sdate" #sdate ="ngModel" ngModel><br> 
+        <h4>Enter Leave End Date:</h4>
+        <input type="Date" name="edate" #edate ="ngModel" ngModel><br>
+        <h4>Enter Leave Type:</h4>
+        <select name="ltype" #ltype ="ngModel" ngModel>
+        <option type="text" >EL</option>
+        </select>
+        <h4>Enter Leave Reason:</h4>
+        <input type="text" name="reason" #reason ="ngModel" ngModel>
+        <div class="form-group"><br>
+        <input type="submit"  value="Apply Leave">
+        </div>
+        </form>
+
+
+{{err}}
+</div>
+</body>
+</Html>

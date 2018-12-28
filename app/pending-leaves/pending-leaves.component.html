@@ -1,0 +1,80 @@
+<html>
+<div style="text-align:center">
+  <h1>
+    Welcome to Pending leaves
+  </h1>
+</div>
+<div>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Leave ID</th>
+                <th>empID</th>
+                <!-- <th>Leave NoOf Days</th> -->
+                <th>Leave StartDate</th>
+                <th>Leave EndDate</th>
+                <th>Leave Type</th>
+                <th>Leave Status</th>
+                <th>Leave Reason</th>
+                <th>Leave AppliedOn</th>
+                <th>Manager comment</th>
+            </tr>
+        </thead>
+        <tbody class="pendingleaves">
+            <tr *ngFor="let pdL of pdleaves">
+                <td>
+                  <div class="zoom">
+                    <h5>{{pdL. leaveId}}</h5>
+                    </div>
+                </td>
+                <td>
+                    <div class="zoom">
+                    <h5>{{pdL.empId}}</h5>
+                    </div>
+                </td>
+                <!-- <td>
+                    <div class="zoom">
+                    <h5>{{pdL.leaveNoOfDays}}</h5>
+                    </div>
+                </td> -->
+                <td>
+                    <div class="zoom">
+                    <h5>{{pdL.leaveStartDate}}</h5>
+                    </div>
+                </td>
+                <td>
+                    <div class="zoom">
+                    <h5>{{pdL.leaveEndDate}}</h5>
+                    </div>
+                </td>
+                <td>
+                    <div class="zoom">
+                    <h5>{{pdL.leaveType}}</h5>
+                    </div>
+                </td>
+                <td>
+                    <div class="zoom">
+                    <h5>{{pdL.leaveStatus}}</h5>
+                    </div>
+                </td>
+                <td>
+                    <div class="zoom">
+                    <h5>{{pdL.leaveReason}}</h5>
+                    </div>
+                </td>
+                <td>
+                    <div class="zoom">
+                  <h5>{{pdL.leaveAppliedOn}}</h5>
+                  </div>
+                </td>
+                <td>
+                    <div class="zoom">
+                  <h5>{{pdL.leaveManagerComment}}</h5>
+                  </div>
+                </td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+  </html>
+
